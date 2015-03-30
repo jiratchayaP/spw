@@ -1,3 +1,4 @@
+import java.lang.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -5,6 +6,10 @@ import java.awt.event.KeyListener;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Iterator;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import javax.swing.Timer;
 
@@ -19,8 +24,10 @@ public class GameEngine implements KeyListener, GameReporter{
 	
 	private long score = 0;
 	private double difficulty = 0.1;
+
+	int a = 0;
 	
-	public GameEngine(GamePanel gp, SpaceShip v) {
+	public GameEngine(GamePanel gp, SpaceShip v){
 		this.gp = gp;
 		this.v = v;		
 		
@@ -60,7 +67,9 @@ public class GameEngine implements KeyListener, GameReporter{
 			if(!e.isAlive()){
 				e_iter.remove();
 				gp.sprites.remove(e);
-				score += 1000;
+				if(a!=1){
+				score += 100;
+				}
 			}
 		}
 		
@@ -68,13 +77,38 @@ public class GameEngine implements KeyListener, GameReporter{
 		
 		Rectangle2D.Double vr = v.getRectangle();
 		Rectangle2D.Double er;
+
 		for(Enemy e : enemies){
 			er = e.getRectangle();
-			if(er.intersects(vr)){
+			if(er.intersects(vr)&&a!=1){
 				die();
+				regame();
 				return;
 			}
 		}
+	}
+
+	public void regame(){
+		
+		int dialogButton = JOptionPane.showConfirmDialog (null, "Restart game?","input", JOptionPane.YES_NO_OPTION);
+		if (dialogButton == JOptionPane.YES_OPTION) {
+    		a=1;
+    		for (Enemy e: enemies ) {
+    			gp.sprites.remove(e);
+			}
+    		timer.start();
+    		generateEnemy();
+    		score = 0;
+		}
+		try {
+    		Thread.sleep(1000);
+		} catch (InterruptedException e) {
+    		e.printStackTrace();
+    		// handle the exception...        
+    		// For example consider calling Thread.currentThread().interrupt(); here.
+		}
+		if(a!=0){a=0;}
+		
 	}
 	
 	public void die(){
