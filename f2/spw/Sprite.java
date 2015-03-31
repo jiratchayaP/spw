@@ -20,4 +20,12 @@ public abstract class Sprite {
 	public Double getRectangle() {
 		return new Rectangle2D.Double(x, y, width, height);
 	}
+
+	public int getWidth(){
+		return this.width;
+	}
+
+	public void setY(int num){
+		this.y = num;
+	}
 }
