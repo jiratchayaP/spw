@@ -53,11 +53,17 @@ public class GameEngine implements KeyListener, GameReporter{
 		gp.sprites.add(e);
 		enemies.add(e);
 	}
+
+	private void generateFlag(){
+		gp.sprites.add(new Flag(200,420,20,20));
+	}
 	
 	private void process(){
 		if(Math.random() < difficulty){
 			generateEnemy();
 		}
+
+		generateFlag();
 		
 		Iterator<Enemy> e_iter = enemies.iterator();
 		while(e_iter.hasNext()){
@@ -86,6 +92,12 @@ public class GameEngine implements KeyListener, GameReporter{
 				return;
 			}
 		}
+	}
+
+	int randomWithRange(int min, int max)
+	{
+	   int range = (max - min) + 1;     
+	   return (int)(Math.random() * range) + min;
 	}
 
 	public void regame(){
