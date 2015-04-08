@@ -18,7 +18,8 @@ public class GameEngine implements KeyListener, GameReporter{
 	GamePanel gp;
 		
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();	
-	private SpaceShip v;	
+	private SpaceShip v;
+	private Flag f;	
 	
 	private Timer timer;
 	
@@ -29,7 +30,10 @@ public class GameEngine implements KeyListener, GameReporter{
 	
 	public GameEngine(GamePanel gp, SpaceShip v){
 		this.gp = gp;
-		this.v = v;		
+		this.v = v;	
+
+		this.f = new Flag(200,420,20,20);
+		gp.sprites.add(f);	
 		
 		gp.sprites.add(v);
 		
@@ -53,17 +57,11 @@ public class GameEngine implements KeyListener, GameReporter{
 		gp.sprites.add(e);
 		enemies.add(e);
 	}
-
-	private void generateFlag(){
-		gp.sprites.add(new Flag(200,420,20,20));
-	}
 	
 	private void process(){
 		if(Math.random() < difficulty){
 			generateEnemy();
 		}
-
-		generateFlag();
 		
 		Iterator<Enemy> e_iter = enemies.iterator();
 		while(e_iter.hasNext()){
@@ -82,12 +80,16 @@ public class GameEngine implements KeyListener, GameReporter{
 		gp.updateGameUI(this);
 		
 		Rectangle2D.Double vr = v.getRectangle();
+		Rectangle2D.Double fr = f.getRectangle();
 		Rectangle2D.Double er;
-
+		if(fr.intersects(vr)){
+			gp.sprites.remove(f);
+		}
 		for(Enemy e : enemies){
 			er = e.getRectangle();
 			if(er.intersects(vr)&&a!=1){
 				die();
+				
 				regame();
 				return;
 			}
