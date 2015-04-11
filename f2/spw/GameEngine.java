@@ -26,15 +26,16 @@ public class GameEngine implements KeyListener, GameReporter{
 	private long score = 0;
 	private double difficulty = 0.1;
 
+	int r_x = (int) (Math.random()*380)+10;
+	int r_y = (int) (Math.random()*580)+10;
+
 	int a = 0;
 	
 	public GameEngine(GamePanel gp, SpaceShip v){
 		this.gp = gp;
 		this.v = v;	
-
-		this.f = new Flag(200,420,20,20);
-		gp.sprites.add(f);	
-		
+		this.f = new Flag(r_x,r_y,40,40);
+		gp.sprites.add(f);
 		gp.sprites.add(v);
 		
 		timer = new Timer(50, new ActionListener() {
@@ -71,9 +72,7 @@ public class GameEngine implements KeyListener, GameReporter{
 			if(!e.isAlive()){
 				e_iter.remove();
 				gp.sprites.remove(e);
-				if(a!=1){
-				score += 100;
-				}
+
 			}
 		}
 		
@@ -84,6 +83,12 @@ public class GameEngine implements KeyListener, GameReporter{
 		Rectangle2D.Double er;
 		if(fr.intersects(vr)){
 			gp.sprites.remove(f);
+
+			r_x = (int) (Math.random()*300)+100;
+			r_y = (int) (Math.random()*500)+100;
+			this.f = new Flag(r_x,r_y,40,40);
+			gp.sprites.add(f);
+			score += 100;
 		}
 		for(Enemy e : enemies){
 			er = e.getRectangle();
