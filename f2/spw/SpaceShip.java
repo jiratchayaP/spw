@@ -8,6 +8,7 @@ import java.io.File;
 public class SpaceShip extends Sprite{
 
 	int step = 4;
+	int life = 3;
 	private BufferedImage image;
 	
 	public SpaceShip(int x, int y, int width, int height) {
@@ -28,6 +29,18 @@ public class SpaceShip extends Sprite{
 		Graphics2D g2 = (Graphics2D)g;
  		g2.drawImage(image, x, y, width, height,null);
 		
+	}
+
+	public void intersect(){
+		this.life--;
+	}
+
+	public int getLife(){
+		return this.life;
+	}	
+
+	public void reGame(){
+		this.life = 3;
 	}
 
 	public void move_x(int direction){

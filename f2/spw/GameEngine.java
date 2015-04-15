@@ -26,10 +26,8 @@ public class GameEngine implements KeyListener, GameReporter{
 	private long score = 0;
 	private double difficulty = 0.1;
 
-	int r_x = (int) (Math.random()*380)+10;
-	int r_y = (int) (Math.random()*580)+10;
-
-	int a = 0;
+	int r_x = (int) (Math.random()*350)+25;
+	int r_y = (int) (Math.random()*550)+25;
 	
 	public GameEngine(GamePanel gp, SpaceShip v){
 		this.gp = gp;
@@ -37,7 +35,6 @@ public class GameEngine implements KeyListener, GameReporter{
 		this.f = new Flag(r_x,r_y,40,40);
 		gp.sprites.add(f);
 		gp.sprites.add(v);
-		
 		timer = new Timer(50, new ActionListener() {
 			
 			@Override
@@ -51,6 +48,7 @@ public class GameEngine implements KeyListener, GameReporter{
 	
 	public void start(){
 		timer.start();
+
 	}
 	
 	private void generateEnemy(){
@@ -62,6 +60,7 @@ public class GameEngine implements KeyListener, GameReporter{
 	private void process(){
 		if(Math.random() < difficulty){
 			generateEnemy();
+
 		}
 		
 		Iterator<Enemy> e_iter = enemies.iterator();
@@ -76,26 +75,36 @@ public class GameEngine implements KeyListener, GameReporter{
 			}
 		}
 		
-		gp.updateGameUI(this);
+		gp.updateGameUI(this,v.getLife());
 		
 		Rectangle2D.Double vr = v.getRectangle();
 		Rectangle2D.Double fr = f.getRectangle();
 		Rectangle2D.Double er;
+		
 		if(fr.intersects(vr)){
 			gp.sprites.remove(f);
-
-			r_x = (int) (Math.random()*300)+100;
-			r_y = (int) (Math.random()*500)+100;
+			r_x = (int) (Math.random()*350)+25;
+			r_y = (int) (Math.random()*550)+25;
 			this.f = new Flag(r_x,r_y,40,40);
 			gp.sprites.add(f);
 			score += 100;
 		}
 		for(Enemy e : enemies){
 			er = e.getRectangle();
-			if(er.intersects(vr)&&a!=1){
-				die();
-				
-				regame();
+
+			if(er.intersects(vr)){
+				if(v.getLife()>0){
+					gp.sprites.remove(e);
+					e.death();
+					e.isAlive();
+					v.intersect();
+				}
+				else{
+					die();
+					gp.sprites.remove(e);
+					enemies.remove(e);
+					regame();
+				}
 				return;
 			}
 		}
@@ -108,15 +117,12 @@ public class GameEngine implements KeyListener, GameReporter{
 	}
 
 	public void regame(){
-		
+		v.reGame();
 		int dialogButton = JOptionPane.showConfirmDialog (null, "Restart game?","input", JOptionPane.YES_NO_OPTION);
 		if (dialogButton == JOptionPane.YES_OPTION) {
-    		a=1;
-    		for (Enemy e: enemies ) {
-    			gp.sprites.remove(e);
-			}
-    		timer.start();
-    		generateEnemy();
+    			timer.start();
+    			generateEnemy();
+    		
     		score = 0;
     		v.setY(590-v.getWidth());
 		}
@@ -127,7 +133,6 @@ public class GameEngine implements KeyListener, GameReporter{
     		// handle the exception...        
     		// For example consider calling Thread.currentThread().interrupt(); here.
 		}
-		if(a!=0){a=0;}
 		
 	}
 	

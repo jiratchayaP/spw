@@ -1,9 +1,8 @@
+import java.util.ArrayList;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-
 import javax.swing.JPanel;
 
 public class GamePanel extends JPanel {
@@ -18,11 +17,11 @@ public class GamePanel extends JPanel {
 		big.setBackground(Color.BLACK);
 	}
 
-	public void updateGameUI(GameReporter reporter){
+	public void updateGameUI(GameReporter reporter,int i){
 		big.clearRect(0, 0, 400, 600);
-		
-		big.setColor(Color.WHITE);		
-		big.drawString(String.format("%08d", reporter.getScore()), 300, 20);
+		big.setColor(Color.PINK);
+		big.drawString(String.format("LIFE: %02d",i),20,20);		
+		big.drawString(String.format("SCORE: %08d", reporter.getScore()), 80, 20);
 		for(Sprite s : sprites){
 			s.draw(big);
 		}
