@@ -3,7 +3,13 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.io.IOException;
+import java.io.File;
+import java.awt.*; 
+
+import java.awt.geom.Ellipse2D;
 
 public class Enemy extends Sprite{
 	public static final int Y_TO_FADE = 400;
@@ -11,23 +17,32 @@ public class Enemy extends Sprite{
 	
 	private int step = 12;
 	private boolean alive = true;
+	private BufferedImage ene;
 	
 	public Enemy(int x, int y) {
-		super(x, y, 5, 10);
+		super(x, y, 20, 20);
+		try{
+			ene = ImageIO.read(getClass().getResourceAsStream("/enemy.gif"));
+		}catch(IOException e){
+			e.printStackTrace();
+		}
 		
 	}
 
 	@Override
 	public void draw(Graphics2D g) {
-		/*if(y < Y_TO_FADE)
+		if(y < Y_TO_FADE)
 			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
 		else{
 			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 
 					(float)(Y_TO_DIE - y)/(Y_TO_DIE - Y_TO_FADE)));
-		}*/
-		
-		g.setColor(Color.RED);
-		g.fillRect(x, y, width, height);
+		}
+		Graphics2D g2 = (Graphics2D)g;
+ 		g2.drawImage(ene, x, y, width, height,null);
+		/*Ellipse2D.Double circle = new Ellipse2D.Double(x, y, width, height);
+		g.setColor(Color.LIGHT_GRAY);
+		g.fill(circle);*/
+		//g.fillRect(x, y, width, height);
 		
 	}
 

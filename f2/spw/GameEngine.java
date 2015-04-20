@@ -26,8 +26,8 @@ public class GameEngine implements KeyListener, GameReporter{
 	private long score = 0;
 	private double difficulty = 0.1;
 
-	int r_x = (int) (Math.random()*350)+25;
-	int r_y = (int) (Math.random()*550)+25;
+	int r_x = (int) (Math.random()*310)+70;
+	int r_y = (int) (Math.random()*510)+70;
 	
 	public GameEngine(GamePanel gp, SpaceShip v){
 		this.gp = gp;
@@ -83,8 +83,8 @@ public class GameEngine implements KeyListener, GameReporter{
 		
 		if(fr.intersects(vr)){
 			gp.sprites.remove(f);
-			r_x = (int) (Math.random()*350)+25;
-			r_y = (int) (Math.random()*550)+25;
+			r_x = (int) (Math.random()*310)+70;
+			r_y = (int) (Math.random()*510)+70;
 			this.f = new Flag(r_x,r_y,40,40);
 			gp.sprites.add(f);
 			score += 100;
