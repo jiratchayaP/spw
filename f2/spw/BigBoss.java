@@ -11,7 +11,7 @@ import java.awt.*;
 
 import java.awt.geom.Ellipse2D;
 
-public class Enemy extends Sprite{
+public class BigBoss extends Sprite{
 	public static final int Y_TO_FADE = 400;
 	public static final int Y_TO_DIE = 600;
 	
@@ -19,7 +19,7 @@ public class Enemy extends Sprite{
 	private boolean alive = true;
 	private BufferedImage ene;
 	
-	public Enemy(int x, int y) {
+	public BigBoss(int x, int y) {
 		super(x, y, 20, 20);
 		try{
 			ene = ImageIO.read(getClass().getResourceAsStream("/enemy.gif"));

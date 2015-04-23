@@ -1,5 +1,3 @@
-//import java.awt.Color;
-//import java.awt.Graphics2D;
 import java.awt.*; 
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
@@ -9,6 +7,7 @@ public class SpaceShip extends Sprite{
 
 	int step = 4;
 	int life = 3;
+	
 	private BufferedImage image;
 	
 	public SpaceShip(int x, int y, int width, int height) {
@@ -29,6 +28,19 @@ public class SpaceShip extends Sprite{
 		Graphics2D g2 = (Graphics2D)g;
  		g2.drawImage(image, x, y, width, height,null);
 		
+	}
+
+	public int getWidth(){
+		return width;
+	}
+	public int getHieght(){
+		return height;
+	}
+	public int getX(){
+		return x;
+	}
+	public int getY(){
+		return y;
 	}
 
 	public void intersect(){

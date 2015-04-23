@@ -20,7 +20,8 @@ public class GameEngine implements KeyListener, GameReporter{
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();	
 	private SpaceShip v;
 	private Flag f;	
-	
+	private ArrayList<Bullet> bullet = new ArrayList<Bullet>();
+	private ArrayList<BigBoss> boss = new ArrayList<BigBoss>();
 	private Timer timer;
 	
 	private long score = 0;
@@ -56,11 +57,18 @@ public class GameEngine implements KeyListener, GameReporter{
 		gp.sprites.add(e);
 		enemies.add(e);
 	}
+	private void generateBullet(){
+		Bullet b = new Bullet((int)(v.getX()+(v.getWidth()/2)),(int)(v.getY()));
+		gp.sprites.add(b);
+		bullet.add(b);
+	}
 	
 	private void process(){
 		if(Math.random() < difficulty){
 			generateEnemy();
-
+		}
+		if(score >= 500){
+			generateBullet();
 		}
 		
 		Iterator<Enemy> e_iter = enemies.iterator();
@@ -74,11 +82,24 @@ public class GameEngine implements KeyListener, GameReporter{
 
 			}
 		}
+
+		Iterator<Bullet> b_iter = bullet.iterator();
+		while(b_iter.hasNext()){
+			Bullet b = b_iter.next();
+			b.proceed();
+			
+			if(!b.isAlive()){
+				b_iter.remove();
+				gp.sprites.remove(b);
+
+			}
+		}
 		
 		gp.updateGameUI(this,v.getLife());
 		
 		Rectangle2D.Double vr = v.getRectangle();
 		Rectangle2D.Double fr = f.getRectangle();
+		Rectangle2D.Double br;
 		Rectangle2D.Double er;
 		
 		if(fr.intersects(vr)){
@@ -91,6 +112,14 @@ public class GameEngine implements KeyListener, GameReporter{
 		}
 		for(Enemy e : enemies){
 			er = e.getRectangle();
+			for(Bullet b: bullet){
+				br = b.getRectangle();
+				if(br.intersects(er)){
+					gp.sprites.remove(e);
+					e.death();
+					e.isAlive();
+				}
+			}
 
 			if(er.intersects(vr)){
 				if(v.getLife()>0){

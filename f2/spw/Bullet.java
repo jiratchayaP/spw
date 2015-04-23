@@ -11,44 +11,40 @@ import java.awt.*;
 
 import java.awt.geom.Ellipse2D;
 
-public class Enemy extends Sprite{
+public class Bullet extends Sprite{
 	public static final int Y_TO_FADE = 400;
-	public static final int Y_TO_DIE = 600;
+	public static final int Y_TO_DIE = 30;
 	
 	private int step = 12;
 	private boolean alive = true;
 	private BufferedImage ene;
 	
-	public Enemy(int x, int y) {
-		super(x, y, 20, 20);
-		try{
-			ene = ImageIO.read(getClass().getResourceAsStream("/enemy.gif"));
-		}catch(IOException e){
-			e.printStackTrace();
-		}
+	public Bullet(int x, int y) {
+		super(x-(5/2), y, 5, 7);
 		
 	}
 
 	@Override
 	public void draw(Graphics2D g) {
-		Graphics2D g2 = (Graphics2D)g;
- 		g2.drawImage(ene, x, y, width, height,null);
-		/*Ellipse2D.Double circle = new Ellipse2D.Double(x, y, width, height);
-		g.setColor(Color.LIGHT_GRAY);
-		g.fill(circle);*/
-		//g.fillRect(x, y, width, height);
+
+		g.setColor(Color.PINK);
+		g.fillRect(x, y, width, height);
 		
 	}
 
 	public void proceed(){
-		y += step;
-		if(y > Y_TO_DIE){
+		y -= step;
+		if(y < Y_TO_DIE){
 			alive = false;
 		}
 	}
 
 	public void death(){
 		alive = false;
+	}
+
+	public int getW(){
+		return width;
 	}
 	
 	public boolean isAlive(){
