@@ -12,23 +12,19 @@ import java.awt.*;
 import java.awt.geom.Ellipse2D;
 
 public class BigBoss extends Sprite{
-	public static final int Y_TO_FADE = 400;
-	public static final int Y_TO_DIE = 600;
-	
+	public static final int X_TO_FADE = 400;
 	private int step = 12;
 	private boolean alive = true;
 	private BufferedImage ene;
 	
 	public BigBoss(int x, int y) {
-		super(x, y, 20, 20);
+		super(x, y, 400, 200);
 		try{
-			ene = ImageIO.read(getClass().getResourceAsStream("/enemy.gif"));
+			ene = ImageIO.read(getClass().getResourceAsStream("/bigboss.gif"));
 		}catch(IOException e){
 			e.printStackTrace();
 		}
-		
 	}
-
 	@Override
 	public void draw(Graphics2D g) {
 		Graphics2D g2 = (Graphics2D)g;
@@ -40,18 +36,17 @@ public class BigBoss extends Sprite{
 		
 	}
 
-	public void proceed(){
-		y += step;
-		if(y > Y_TO_DIE){
-			alive = false;
-		}
-	}
-
 	public void death(){
 		alive = false;
 	}
 	
 	public boolean isAlive(){
 		return alive;
+	}
+	public void proceed(){
+		x += step;
+		if(x > X_TO_FADE){
+			alive = false;
+		}
 	}
 }

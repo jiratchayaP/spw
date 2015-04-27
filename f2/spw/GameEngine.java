@@ -21,15 +21,16 @@ public class GameEngine implements KeyListener, GameReporter{
 	private SpaceShip v;
 	private Flag f;	
 	private ArrayList<Bullet> bullet = new ArrayList<Bullet>();
-	private ArrayList<BigBoss> boss = new ArrayList<BigBoss>();
+	private ArrayList<BigBoss> bigboss = new ArrayList<BigBoss>();
 	private Timer timer;
 	
 	private long score = 0;
 	private double difficulty = 0.1;
 
-	int r_x = (int) (Math.random()*310)+70;
-	int r_y = (int) (Math.random()*510)+70;
-	
+	int r_x = (int) (Math.random()*310);
+	int r_y = (int) (Math.random()*510);
+	int num = 0;
+
 	public GameEngine(GamePanel gp, SpaceShip v){
 		this.gp = gp;
 		this.v = v;	
@@ -51,9 +52,9 @@ public class GameEngine implements KeyListener, GameReporter{
 		timer.start();
 
 	}
-	
+	//(int)(Math.random()*390)
 	private void generateEnemy(){
-		Enemy e = new Enemy((int)(Math.random()*390), 30);
+		Enemy e = new Enemy(v.getX(), 30);
 		gp.sprites.add(e);
 		enemies.add(e);
 	}
@@ -62,15 +63,39 @@ public class GameEngine implements KeyListener, GameReporter{
 		gp.sprites.add(b);
 		bullet.add(b);
 	}
+
+	private void generateBigBoss(){
+		BigBoss big = new BigBoss(10,(int)(Math.random()*500));
+		gp.sprites.add(big);
+		bigboss.add(big);
+	}
 	
 	private void process(){
 		if(Math.random() < difficulty){
 			generateEnemy();
 		}
-		if(score >= 500){
+		if(score >= 200){
 			generateBullet();
 		}
-		
+
+			if(((score%500)==0) && score!=0 && num==0){
+				generateBigBoss();
+				num = 1;
+			}
+
+		Iterator<BigBoss> big_iter = bigboss.iterator();
+		while(big_iter.hasNext()){
+			BigBoss big = big_iter.next();
+			big.proceed();
+	
+			if(!big.isAlive()){
+				big_iter.remove();
+				gp.sprites.remove(big);
+				num=0;
+			}
+		} 	
+
+
 		Iterator<Enemy> e_iter = enemies.iterator();
 		while(e_iter.hasNext()){
 			Enemy e = e_iter.next();
@@ -99,13 +124,14 @@ public class GameEngine implements KeyListener, GameReporter{
 		
 		Rectangle2D.Double vr = v.getRectangle();
 		Rectangle2D.Double fr = f.getRectangle();
+		Rectangle2D.Double bbr;
 		Rectangle2D.Double br;
 		Rectangle2D.Double er;
 		
 		if(fr.intersects(vr)){
 			gp.sprites.remove(f);
-			r_x = (int) (Math.random()*310)+70;
-			r_y = (int) (Math.random()*510)+70;
+			r_x = (int) (Math.random()*310);
+			r_y = (int) (Math.random()*510);
 			this.f = new Flag(r_x,r_y,40,40);
 			gp.sprites.add(f);
 			score += 100;
@@ -120,7 +146,6 @@ public class GameEngine implements KeyListener, GameReporter{
 					e.isAlive();
 				}
 			}
-
 			if(er.intersects(vr)){
 				if(v.getLife()>0){
 					gp.sprites.remove(e);
@@ -131,18 +156,31 @@ public class GameEngine implements KeyListener, GameReporter{
 				else{
 					die();
 					gp.sprites.remove(e);
+					for(BigBoss bb: bigboss){
+						bigboss.remove(bb);
+						gp.sprites.remove(bb);
+					}
+					
 					enemies.remove(e);
 					regame();
 				}
 				return;
 			}
 		}
-	}
-
-	int randomWithRange(int min, int max)
-	{
-	   int range = (max - min) + 1;     
-	   return (int)(Math.random() * range) + min;
+		for(BigBoss bb : bigboss){
+				bbr = bb.getRectangle();
+				if(bbr.intersects(vr)){
+					die();
+					for(Enemy e:enemies){
+						gp.sprites.remove(e);
+						enemies.remove(e);
+					}
+					gp.sprites.remove(bb);
+					bigboss.remove(bb);
+					
+					regame();
+				}
+		}
 	}
 
 	public void regame(){
@@ -153,14 +191,13 @@ public class GameEngine implements KeyListener, GameReporter{
     			generateEnemy();
     		
     		score = 0;
-    		v.setY(590-v.getWidth());
+    		v.setY(550);
+    		v.setX(180);
 		}
 		try {
     		Thread.sleep(1000);
 		} catch (InterruptedException e) {
     		e.printStackTrace();
-    		// handle the exception...        
-    		// For example consider calling Thread.currentThread().interrupt(); here.
 		}
 		
 	}

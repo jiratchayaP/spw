@@ -24,8 +24,14 @@ public abstract class Sprite {
 	public int getWidth(){
 		return this.width;
 	}
+	public int getHeight(){
+		return this.height;
+	}
 
 	public void setY(int num){
 		this.y = num;
+	}
+	public void setX(int num){
+		this.x = num;
 	}
 }

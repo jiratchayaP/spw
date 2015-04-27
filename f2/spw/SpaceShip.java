@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.File;
 public class SpaceShip extends Sprite{
 
-	int step = 4;
+	int step = 15;
 	int life = 3;
 	
 	private BufferedImage image;
@@ -33,7 +33,7 @@ public class SpaceShip extends Sprite{
 	public int getWidth(){
 		return width;
 	}
-	public int getHieght(){
+	public int getHeight(){
 		return height;
 	}
 	public int getX(){
