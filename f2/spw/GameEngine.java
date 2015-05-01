@@ -54,7 +54,7 @@ public class GameEngine implements KeyListener, GameReporter{
 	}
 	//(int)(Math.random()*390)
 	private void generateEnemy(){
-		Enemy e = new Enemy(v.getX(), 30);
+		Enemy e = new Enemy((int)(Math.random()*390), 30);
 		gp.sprites.add(e);
 		enemies.add(e);
 	}
@@ -63,7 +63,7 @@ public class GameEngine implements KeyListener, GameReporter{
 		gp.sprites.add(b);
 		bullet.add(b);
 	}
-
+//(int)(Math.random()*500)
 	private void generateBigBoss(){
 		BigBoss big = new BigBoss(10,(int)(Math.random()*500));
 		gp.sprites.add(big);
@@ -71,6 +71,7 @@ public class GameEngine implements KeyListener, GameReporter{
 	}
 	
 	private void process(){
+		if(score%500!=0 && num!=0){num=0;}
 		if(Math.random() < difficulty){
 			generateEnemy();
 		}
@@ -78,10 +79,10 @@ public class GameEngine implements KeyListener, GameReporter{
 			generateBullet();
 		}
 
-			if(((score%500)==0) && score!=0 && num==0){
-				generateBigBoss();
-				num = 1;
-			}
+		if(((score%500)==0) && score!=0 && num==0){
+			generateBigBoss();
+			num = 1;
+		}
 
 		Iterator<BigBoss> big_iter = bigboss.iterator();
 		while(big_iter.hasNext()){
@@ -91,7 +92,6 @@ public class GameEngine implements KeyListener, GameReporter{
 			if(!big.isAlive()){
 				big_iter.remove();
 				gp.sprites.remove(big);
-				num=0;
 			}
 		} 	
 
@@ -135,7 +135,20 @@ public class GameEngine implements KeyListener, GameReporter{
 			this.f = new Flag(r_x,r_y,40,40);
 			gp.sprites.add(f);
 			score += 100;
-		}
+		}/*
+		for(BigBoss bb : bigboss){
+			bbr = bb.getRectangle();
+			if(bbr.intersects(vr)){
+				die();
+				for(Enemy e:enemies){
+					gp.sprites.remove(e);
+					enemies.remove(e);
+				}
+				gp.sprites.remove(bb);
+				bigboss.remove(bb);
+				regame();
+			}
+		}*/
 		for(Enemy e : enemies){
 			er = e.getRectangle();
 			for(Bullet b: bullet){
@@ -144,6 +157,17 @@ public class GameEngine implements KeyListener, GameReporter{
 					gp.sprites.remove(e);
 					e.death();
 					e.isAlive();
+				}
+			}
+			for(BigBoss bb : bigboss){
+			bbr = bb.getRectangle();
+			if(bbr.intersects(vr)){
+				die();
+				gp.sprites.remove(e);
+				enemies.remove(e);
+				gp.sprites.remove(bb);
+				bigboss.remove(bb);
+				regame();
 				}
 			}
 			if(er.intersects(vr)){
@@ -156,30 +180,11 @@ public class GameEngine implements KeyListener, GameReporter{
 				else{
 					die();
 					gp.sprites.remove(e);
-					for(BigBoss bb: bigboss){
-						bigboss.remove(bb);
-						gp.sprites.remove(bb);
-					}
-					
 					enemies.remove(e);
 					regame();
 				}
 				return;
 			}
-		}
-		for(BigBoss bb : bigboss){
-				bbr = bb.getRectangle();
-				if(bbr.intersects(vr)){
-					die();
-					for(Enemy e:enemies){
-						gp.sprites.remove(e);
-						enemies.remove(e);
-					}
-					gp.sprites.remove(bb);
-					bigboss.remove(bb);
-					
-					regame();
-				}
 		}
 	}
 
