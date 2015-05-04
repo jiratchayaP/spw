@@ -139,7 +139,7 @@ public class GameEngine implements KeyListener, GameReporter{
 			er = e.getRectangle();
 			for(Bullet b: bullet){
 				br = b.getRectangle();
-				if(br.intersects(er)){
+				if(br.intersects(er) && !(e instanceof Gun)){
 					gp.sprites.remove(e);
 					e.death();
 					e.isAlive();
@@ -152,20 +152,16 @@ public class GameEngine implements KeyListener, GameReporter{
 					item_on = true;
 				}
 				else if(e instanceof BigBoss){
-					gp.sprites.remove(e);
-					e.death();
 					die();
 					regame();
 				}
-				if(v.getLife()>0){
+				else if(v.getLife()>0){
 					gp.sprites.remove(e);
 					e.death();
 					v.intersect();
 				}
 				else{
 					die();
-					gp.sprites.remove(e);
-					enemies.remove(e);
 					regame();
 				}
 				return;
@@ -174,12 +170,23 @@ public class GameEngine implements KeyListener, GameReporter{
 	}
 
 	public void regame(){
+		for(Enemy e: enemies){
+			gp.sprites.remove(e);
+			e.death();
+		}
+		gp.sprites.remove(f);
+		for(Bullet b: bullet){
+			gp.sprites.remove(b);
+			b.death();
+		}
 		v.reGame();
+		gp.sprites.add(f);
+		item_time = 0;
+		item_on = false;
 		int dialogButton = JOptionPane.showConfirmDialog (null, "Restart game?","input", JOptionPane.YES_NO_OPTION);
 		if (dialogButton == JOptionPane.YES_OPTION) {
     			timer.start();
     			generateEnemy();
-    		
     		score = 0;
     		v.setY(550);
     		v.setX(180);
@@ -188,8 +195,7 @@ public class GameEngine implements KeyListener, GameReporter{
     		Thread.sleep(1000);
 		} catch (InterruptedException e) {
     		e.printStackTrace();
-		}
-		
+		}	
 	}
 	
 	public void die(){
