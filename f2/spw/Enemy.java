@@ -19,14 +19,13 @@ public class Enemy extends Sprite{
 	private boolean alive = true;
 	private BufferedImage ene;
 	
-	public Enemy(int x, int y) {
-		super(x, y, 20, 20);
+	public Enemy(int x, int y, int widght, int hieght) {
+		super(x, y, widght, hieght);
 		try{
 			ene = ImageIO.read(getClass().getResourceAsStream("/enemy.gif"));
 		}catch(IOException e){
 			e.printStackTrace();
 		}
-		
 	}
 
 	@Override

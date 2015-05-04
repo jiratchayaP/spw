@@ -5,19 +5,14 @@ import java.io.IOException;
 import java.io.File;
 
 
-public class Gun extends Sprite{
-	public static final int Y_TO_FADE = 400;
-	public static final int Y_TO_DIE = 600;
-	
-	private int step = 12;
-	private boolean alive = true;
+public class Gun extends Enemy{
 
 	private BufferedImage image;
 
-	public Gun (int x, int y, int width, int height) {
-		super(x, y, width, height);
+	public Gun (int x, int y) {
+		super(x,y,40,40);
 		try{
-			image = ImageIO.read(getClass().getResourceAsStream("/flag.gif"));
+			image = ImageIO.read(getClass().getResourceAsStream("/gun.gif"));
 		}catch(IOException e){
 			e.printStackTrace();
 		}
@@ -29,19 +24,4 @@ public class Gun extends Sprite{
  		g2.drawImage(image, x, y, width, height,null);
 		
 	}
-
-	public void proceed(){
-		y += step;
-		if(y > Y_TO_DIE){
-			alive = false;
-		}
-	}
-	public void death(){
-		alive = false;
-	}
-	
-	public boolean isAlive(){
-		return alive;
-	}
-
 }

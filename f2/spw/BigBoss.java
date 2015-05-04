@@ -11,7 +11,7 @@ import java.awt.*;
 
 import java.awt.geom.Ellipse2D;
 
-public class BigBoss extends Sprite{
+public class BigBoss extends Enemy{
 	public static final int X_TO_FADE = 400;
 	private int step = 12;
 	private boolean alive = true;
@@ -29,20 +29,10 @@ public class BigBoss extends Sprite{
 	public void draw(Graphics2D g) {
 		Graphics2D g2 = (Graphics2D)g;
  		g2.drawImage(ene, x, y, width, height,null);
-		/*Ellipse2D.Double circle = new Ellipse2D.Double(x, y, width, height);
-		g.setColor(Color.LIGHT_GRAY);
-		g.fill(circle);*/
-		//g.fillRect(x, y, width, height);
 		
 	}
 
-	public void death(){
-		alive = false;
-	}
-	
-	public boolean isAlive(){
-		return alive;
-	}
+	@Override
 	public void proceed(){
 		x += step;
 		if(x > X_TO_FADE){
