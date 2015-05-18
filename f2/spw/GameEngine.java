@@ -197,7 +197,9 @@ public class GameEngine implements KeyListener, GameReporter{
     		e.printStackTrace();
 		}	
 	}
-	
+	public void unpause(){
+		timer.start();
+	}
 	public void die(){
 		timer.stop();
 	}
@@ -215,9 +217,6 @@ public class GameEngine implements KeyListener, GameReporter{
 			break;
 		case KeyEvent.VK_RIGHT:
 			v.move_x(1);
-			break;
-		case KeyEvent.VK_D:
-			difficulty += 0.1;
 			break;
 		}
 	}
